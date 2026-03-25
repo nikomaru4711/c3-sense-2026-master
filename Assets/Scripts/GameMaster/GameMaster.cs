@@ -37,6 +37,17 @@ public class GameMaster : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        if (questionSetter == null)
+        {
+            Debug.LogError("QuestionSetterの参照が設定されていません。");
+            return;
+        }
+        if (panelCreator == null)
+        {
+            Debug.LogError("PanelCreatorの参照が設定されていません。");
+            return;
+        }
+
         questionSetter.enabled = false; // ゲーム開始前はQuestionSetterを無効にする
         playUIPanel.SetActive(false); // プレイ中UIを非表示にする
         resultUIPanel.SetActive(false); // リザルトUIを非表示にする
@@ -45,6 +56,11 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (questionSetter == null || panelCreator == null)
+        {
+            return; // 参照が設定されていない場合は処理を行わない
+        }
+
         if (isGameStarted)
         {
             questionSetter.timeRemaining -= Time.deltaTime; // 残り時間を減少させる

@@ -30,12 +30,8 @@ public class PanelCreator : MonoBehaviour
             if (panelScript != null)
             {
                 int shutterType = Random.Range(0, gameMaster.difficulty + 1); // シャッターの種類をランダムに選択
-                int sign;
-                if (gameMaster.difficulty == 0)
-                {
-                    sign = 1;
-                }
-                else
+                int sign = 1;
+                if (gameMaster.difficulty != 0)
                 {
                     sign = Random.Range(0, 2) * 2 - 1; // ランダムに-1か1を選択
                 }
