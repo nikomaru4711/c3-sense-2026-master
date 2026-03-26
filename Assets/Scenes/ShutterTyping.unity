@@ -1647,6 +1647,7 @@ MonoBehaviour:
   isGameStarted: 0
   livesRemaining: 0
   score: 0
+  comboCount: 0
 --- !u!114 &1297374469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1857,6 +1858,7 @@ MonoBehaviour:
   panelSpacing: 400
   panelPrefab: {fileID: 7518616244179477064, guid: a8d066d5144be5345a1045fba5901da7, type: 3}
   plusPrefab: {fileID: 4101138995971294599, guid: acb59584490778540b69c7ff7ac9c728, type: 3}
+  comboUIPrefab: {fileID: 6494392086557122394, guid: e5d328236c51f844a90abe86c720db0a, type: 3}
   questionSetter: {fileID: 1297374469}
   gameMaster: {fileID: 1297374468}
 --- !u!1 &1477121806

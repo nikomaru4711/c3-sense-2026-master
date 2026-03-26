@@ -11,12 +11,15 @@ public class PanelCreator : MonoBehaviour
     [SerializeField] private GameObject panelPrefab;
     [Tooltip("プラス記号のプレハブ")]
     [SerializeField] private GameObject plusPrefab;
+    [Tooltip("コンボUIのプレハブ")]
+    [SerializeField] private GameObject comboUIPrefab;
     [Header("関連するスクリプトの参照")]
     [SerializeField] private QuestionSetter questionSetter;
     [SerializeField] private GameMaster gameMaster;
 
     private GameObject[] AnswerPanels; // 生成されたパネルの配列
     private GameObject[] PlusObjects; // 生成されたプラス記号の配列
+    private GameObject comboUI;
 
 
     // 問題設定時にQuestionSetterから呼び出されるメソッド
@@ -86,6 +89,24 @@ public class PanelCreator : MonoBehaviour
             {
                 Destroy(plus);
             }
+        }
+    }
+
+    public void CreateComboUI(int comboCount)
+    {
+        if (comboUI != null)
+        {
+            Destroy(comboUI);
+        }
+        comboUI = Instantiate(comboUIPrefab, transform);
+        ComboUI comboUIScript = comboUI.GetComponent<ComboUI>();
+        if (comboUIScript != null)
+        {
+            comboUIScript.Setup(comboCount);
+        }
+        else
+        {
+            Debug.LogError("ComboUIスクリプトが見つかりませんでした");
         }
     }
 }

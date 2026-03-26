@@ -32,7 +32,8 @@ public class GameMaster : MonoBehaviour
     public int difficulty = -1; // -1: 未選択, 0: 初級, 1: 中級, 2: 上級
     public bool isGameStarted = false; // ゲームが開始されたかどうか
     public int livesRemaining; // プレイヤーの残りライフ
-    public int score; // プレイヤーのスコア
+    public int score = 0; // プレイヤーのスコア
+    public int comboCount = 0; // プレイヤーのコンボ数
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -69,6 +70,7 @@ public class GameMaster : MonoBehaviour
                 if (livesRemaining > 1)
                 {
                     livesRemaining--; // ライフを減らす
+                    comboCount = 0; // コンボをリセットする
                     Debug.Log($"時間切れです。残りライフ: {livesRemaining}");
                     questionSetter.FinishQuestion(); // 問題を終了するメソッドを呼び出す
                 }

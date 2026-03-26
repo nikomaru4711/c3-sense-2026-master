@@ -20,6 +20,7 @@ public class QuestionSetter : MonoBehaviour
     private int[] LivesByDifficulty = { 5, 3, 1 }; // 難易度ごとのライフ数
     private int[] NumOfQs = { 10, 15, 20 }; // 難易度ごとの出題数
     private float[] TimeLimits = { 10f, 8f, 6f }; // 難易度ごとの制限時間
+    private float minCombo = 3; // コンボ数の最小値（このコンボ数以上でコンボボーナスが発生する）
 
     // 数字とアルファベットのキーコードのリスト
     private KeyCode[] AnswerKeys = new KeyCode[]
@@ -113,9 +114,18 @@ public class QuestionSetter : MonoBehaviour
 
     public void UpdateScore(float timeRemaining, float questionScore)
     {
+        // コンボ数の更新
+        gameMaster.comboCount++; // コンボ数を1増やす
         // スコアの更新処理
-        int score = (int)(questionScore); // 問題のスコアを整数に変換
-        gameMaster.score += score; // GameMasterのスコアを更新
+        // 3コンボ以上の場合は、コンボ数に応じたボーナスポイントを加算する
+        float comboBonus = 1f;
+        if (gameMaster.comboCount >= minCombo)
+        {
+            comboBonus += 0.1f * Mathf.Max(0, gameMaster.comboCount - 2); // 3コンボ以上の場合は、コンボ数に応じたボーナスポイントを加算
+            panelCreator.CreateComboUI(gameMaster.comboCount); // コンボUIを生成する
+        }
+        float score = questionScore * comboBonus * (0.5f + 0.5f * timeRemaining / timeLimitPerQuestion); // コンボボーナスと時間ボーナスを考慮してスコアを計算
+        gameMaster.score += (int)score; // GameMasterのスコアを更新
         Debug.Log($"スコアが更新されました。現在のスコア: {gameMaster.score}");
     }
 
@@ -141,6 +151,7 @@ public class QuestionSetter : MonoBehaviour
                     if (!System.Array.Exists(CorrectAnswers, key => key == AnswerKeys[i]))
                     {
                         gameMaster.score = Mathf.Max(0, gameMaster.score - penaltyPoints); // 不正解のキーが押された場合はスコアを減点（最低0点まで）
+                        gameMaster.comboCount = 0; // コンボ数をリセット
                         Debug.Log($"不正解のキーが押されました: {AnswerKeys[i]}. スコアが減点されました。現在のスコア: {gameMaster.score}");
                     }
 
@@ -158,7 +169,7 @@ public class QuestionSetter : MonoBehaviour
             // プレイヤーがすべての正解のキーを押した場合は正解とする
             int numberOfCorrectAnswers = CorrectAnswers.Length;
 
-            UpdateScore(timeRemaining, 100f); // 正解の場合はスコアを加算
+            UpdateScore(timeRemaining, 100f * numberOfCorrectAnswers); // 正解の場合はスコアを加算
             Debug.Log("正解です！");
             FinishQuestion(); // 次の問題を設定する
         }
